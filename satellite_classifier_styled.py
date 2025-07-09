@@ -102,6 +102,38 @@ st.markdown(f"""
         border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }}
+    /* Make file uploader dark */
+[data-testid="stFileUploader"] > div {
+    background-color: #1e1e2f !important;
+    border: 2px dashed #4a4a6a !important;
+    color: #f8f9fa !important;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Button inside uploader */
+[data-testid="stFileUploader"] button {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Upload text (e.g., drag & drop text) */
+[data-testid="stFileUploader"] label {
+    color: #adb5bd !important;
+    font-weight: 500;
+}
+
+/* General background color override for boxes */
+.stMarkdown, .stDataFrame, .stImage, .stExpander, .stMetric, .stPlotlyChart {
+    background-color: #1e1e2f !important;
+    color: #f8f9fa !important;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
