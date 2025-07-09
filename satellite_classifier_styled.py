@@ -43,6 +43,16 @@ st.markdown(f"""
         font-size: 1.1rem;
         font-weight: 300;
     }}
+# Constants for the UI (should come first!)
+    COLOR_THEME = {
+    'primary': '#4169E1',      # Royal Blue
+    'secondary': '#32CD32',    # Lime Green
+    'background': '#F8F9FA',
+    'text': '#212529',
+    'success': '#28A745',
+    'warning': '#FFC107',
+    'danger': '#DC3545'
+    }
 
     /* Card */
     .card {{
