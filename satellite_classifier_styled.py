@@ -1,17 +1,4 @@
-with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📤 NEURAL INPUT INTERFACE")
-        
-        uploaded_file = st.file_uploader(
-            "◆ UPLOAD SATELLITE IMAGERY TO NEURAL MATRIX",
-            type=['png', 'jpg', 'jpeg', 'tiff', 'tif'],
-            help="Upload satellite imagery for AI classification analysis"
-        )
-        
-        if uploaded_file is not None:
-            # Display the uploaded image with cyberpunk styling
-            image = Image.open(uploaded_file)
-            st.image(image, caption="📸 NEURALimport streamlit as st
+import streamlit as st
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -25,268 +12,128 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for cyberpunk/futuristic styling
+# Custom CSS for enhanced styling
 st.markdown("""
 <style>
-    /* Import futuristic font */
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-    
-    /* Dark theme base */
-    .stApp {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-        color: #00ffff;
-    }
-    
-    /* Animated background particles */
+    /* Main container styling */
     .main-container {
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
-        border: 1px solid #00ffff;
-        border-radius: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 2rem;
+        border-radius: 15px;
         margin: 1rem 0;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .main-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.03), transparent);
-        animation: scan 3s linear infinite;
-    }
-    
-    @keyframes scan {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
     
     /* Header styling */
     .header-container {
         text-align: center;
-        background: rgba(0, 0, 0, 0.9);
-        border: 2px solid #00ffff;
-        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .header-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #00ffff, transparent);
-        animation: glow 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes glow {
-        from { box-shadow: 0 0 5px #00ffff; }
-        to { box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .main-title {
-        font-family: 'Orbitron', monospace;
-        font-size: 3.5rem;
-        font-weight: 900;
-        color: #00ffff;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #1f2937;
         margin-bottom: 0.5rem;
-        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-        animation: flicker 3s ease-in-out infinite alternate;
-    }
-    
-    @keyframes flicker {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     .subtitle {
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 1.4rem;
-        color: #ff6b6b;
+        font-size: 1.2rem;
+        color: #4b5563;
         margin-bottom: 1rem;
-        text-shadow: 0 0 5px #ff6b6b;
     }
     
     /* Card styling */
     .card {
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(26, 26, 46, 0.9) 100%);
-        border: 1px solid #00ffff;
-        border-radius: 20px;
+        background: white;
         padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         margin: 1rem 0;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.05), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        border: 1px solid #e5e7eb;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
     .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
-        border-color: #ff6b6b;
-    }
-    
-    .card:hover::before {
-        opacity: 1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     }
     
     /* Sidebar styling */
     .sidebar-card {
-        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
-        border: 1px solid #ff6b6b;
-        border-radius: 15px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
         padding: 1.5rem;
+        border-radius: 10px;
         margin: 1rem 0;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .sidebar-card::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
-        animation: pulse-line 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-line {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
     /* Results styling */
     .result-card {
-        background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
-        border: 2px solid #00ffff;
-        border-radius: 20px;
-        padding: 2rem;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px;
         margin: 1rem 0;
         text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .result-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
-        animation: radar 4s linear infinite;
-    }
-    
-    @keyframes radar {
-        0% { transform: scale(0) rotate(0deg); opacity: 1; }
-        100% { transform: scale(2) rotate(360deg); opacity: 0; }
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
     
     .confidence-badge {
-        background: rgba(0, 255, 255, 0.2);
-        border: 1px solid #00ffff;
-        border-radius: 25px;
-        padding: 0.75rem 1.5rem;
-        font-family: 'Rajdhani', sans-serif;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
         font-weight: 600;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         margin: 0.5rem;
         display: inline-block;
-        text-shadow: 0 0 5px #00ffff;
     }
     
     /* Button styling */
     .stButton > button {
-        background: linear-gradient(45deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
-        border: 2px solid #00ffff;
-        color: #00ffff;
-        padding: 1rem 2rem;
-        border-radius: 30px;
-        font-family: 'Rajdhani', sans-serif;
+        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 1rem;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         width: 100%;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .stButton > button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
-        transition: left 0.5s ease;
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
-        border-color: #ff6b6b;
-        color: #ff6b6b;
-        text-shadow: 0 0 10px #ff6b6b;
-    }
-    
-    .stButton > button:hover::before {
-        left: 100%;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
     
     /* File uploader styling */
     .stFileUploader {
-        background: rgba(0, 0, 0, 0.5);
-        border: 2px dashed #00ffff;
-        border-radius: 15px;
-        padding: 3rem;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 2rem;
         text-align: center;
         transition: all 0.3s ease;
-        position: relative;
     }
     
     .stFileUploader:hover {
-        border-color: #ff6b6b;
-        background: rgba(255, 107, 107, 0.05);
-        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        border-color: #667eea;
+        background: #f1f5f9;
     }
     
     /* Progress bar styling */
     .stProgress > div > div {
-        background: linear-gradient(45deg, #00ffff 0%, #ff6b6b 100%);
+        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        animation: progress-glow 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes progress-glow {
-        from { box-shadow: 0 0 5px rgba(0, 255, 255, 0.5); }
-        to { box-shadow: 0 0 15px rgba(0, 255, 255, 0.8); }
     }
     
     /* Metrics styling */
@@ -299,86 +146,30 @@ st.markdown("""
     .metric-item {
         text-align: center;
         padding: 1rem;
-        background: rgba(0, 255, 255, 0.1);
-        border: 1px solid #00ffff;
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
         margin: 0.5rem;
         flex: 1;
-        position: relative;
-        overflow: hidden;
     }
     
-    .metric-item::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: #00ffff;
-        animation: metric-pulse 3s ease-in-out infinite;
+    /* Animation for loading */
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
     }
     
-    @keyframes metric-pulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 1; }
+    .loading {
+        animation: pulse 2s infinite;
     }
     
     /* Chart styling */
     .chart-container {
-        background: rgba(0, 0, 0, 0.8);
-        border: 1px solid #00ffff;
-        border-radius: 15px;
+        background: white;
         padding: 1.5rem;
-        margin: 1rem 0;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .chart-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.02), transparent);
-        animation: chart-scan 4s linear infinite;
-    }
-    
-    @keyframes chart-scan {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-    
-    /* Text styling */
-    h1, h2, h3 {
-        font-family: 'Orbitron', monospace;
-        color: #00ffff;
-        text-shadow: 0 0 5px #00ffff;
-    }
-    
-    p, div {
-        font-family: 'Rajdhani', sans-serif;
-        color: #ffffff;
-    }
-    
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.5);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: linear-gradient(45deg, #00ffff, #ff6b6b);
         border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(45deg, #ff6b6b, #00ffff);
+        margin: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -477,58 +268,58 @@ def predict_image(image_array, class_names):
         return None, None, None
 
 def display_model_info(class_names, df):
-    """Display model information in sidebar with cyberpunk styling"""
+    """Display model information in sidebar"""
     st.markdown('<div class="sidebar-card">', unsafe_allow_html=True)
-    st.markdown("### 🤖 AI NEURAL MATRIX")
+    st.markdown("### 🤖 Model Information")
     
-    # Model metrics with cyberpunk theme
+    # Model metrics
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("◆ CLASSES", len(class_names))
+        st.metric("Classes", len(class_names))
     with col2:
-        st.metric("◆ ACCURACY", "94.2%")
+        st.metric("Accuracy", "94.2%")
     
     st.markdown('</div>', unsafe_allow_html=True)
     
     # Class labels in an expandable section
-    with st.expander("🏷️ NEURAL PATHWAYS"):
+    with st.expander("🏷️ View All Classes"):
         for i, class_name in enumerate(class_names):
-            st.write(f"**[{i+1:02d}]** {class_name}")
+            st.write(f"**{i+1}.** {class_name}")
     
-    # Dataset statistics with cyberpunk styling
+    # Dataset statistics
     if not df.empty:
-        with st.expander("📊 DATA MATRIX"):
+        with st.expander("📊 Dataset Statistics"):
             class_counts = df['label'].value_counts()
             st.bar_chart(class_counts)
 
 def display_instructions():
-    """Display usage instructions with cyberpunk theme"""
+    """Display usage instructions"""
     st.markdown("""
     <div class="sidebar-card">
-        <h3>📝 OPERATION PROTOCOL</h3>
+        <h3>📝 How to Use</h3>
         <ol>
-            <li><strong>UPLOAD</strong> satellite imagery to neural matrix</li>
-            <li><strong>EXECUTE</strong> classification algorithm</li>
-            <li><strong>ANALYZE</strong> AI-generated results</li>
+            <li><strong>Upload</strong> a satellite image</li>
+            <li><strong>Click</strong> 'Classify Image' button</li>
+            <li><strong>View</strong> prediction results</li>
         </ol>
-        <p><em>⚡ OPTIMIZATION: Use high-res satellite data for maximum neural efficiency!</em></p>
+        <p><em>💡 Tip: Use high-quality satellite images for best results!</em></p>
     </div>
     """, unsafe_allow_html=True)
 
 def display_results(results):
-    """Display prediction results with cyberpunk styling"""
+    """Display prediction results with enhanced styling"""
     st.markdown(f"""
     <div class="result-card">
-        <h2>🎯 NEURAL ANALYSIS COMPLETE</h2>
-        <h3>📍 IDENTIFIED: {results['predicted_class']}</h3>
+        <h2>🎯 Prediction Results</h2>
+        <h3>📍 {results['predicted_class']}</h3>
         <div class="confidence-badge">
-            CONFIDENCE LEVEL: {results['confidence']:.1%}
+            Confidence: {results['confidence']:.1%}
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Enhanced progress bar with cyberpunk theme
-    st.markdown("#### ⚡ NEURAL CERTAINTY MATRIX")
+    # Enhanced progress bar
+    st.markdown("#### Confidence Level")
     progress_col1, progress_col2 = st.columns([4, 1])
     with progress_col1:
         st.progress(float(results['confidence']))
@@ -537,7 +328,7 @@ def display_results(results):
     
     # Top predictions chart
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-    st.markdown("#### 📈 TOP NEURAL PATHWAYS")
+    st.markdown("#### 📈 Top 5 Predictions")
     
     prob_df = pd.DataFrame({
         'Class': results['class_names'],
@@ -548,21 +339,21 @@ def display_results(results):
     st.markdown('</div>', unsafe_allow_html=True)
     
     # Detailed probabilities
-    with st.expander("📋 COMPLETE NEURAL MATRIX"):
+    with st.expander("📋 View All Probabilities"):
         full_prob_df = pd.DataFrame({
             'Class': results['class_names'],
             'Probability': results['all_predictions']
         }).sort_values('Probability', ascending=False)
         
-        full_prob_df['Neural Score'] = full_prob_df['Probability'].apply(lambda x: f"{x:.2%}")
-        st.dataframe(full_prob_df[['Class', 'Neural Score']], use_container_width=True)
+        full_prob_df['Probability %'] = full_prob_df['Probability'].apply(lambda x: f"{x:.2%}")
+        st.dataframe(full_prob_df[['Class', 'Probability %']], use_container_width=True)
 
 def main():
-    # Cyberpunk header
+    # Enhanced header
     st.markdown("""
     <div class="header-container">
-        <h1 class="main-title">🛰️ NEURAL SATELLITE SCANNER</h1>
-        <p class="subtitle">⚡ QUANTUM AI CLASSIFICATION SYSTEM ⚡</p>
+        <h1 class="main-title">🛰️ Satellite Image Classifier</h1>
+        <p class="subtitle">AI-powered satellite image analysis and classification</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -573,20 +364,19 @@ def main():
         st.error("❌ No class labels available.")
         return
     
-    # Enhanced sidebar with cyberpunk theme
+    # Enhanced sidebar
     with st.sidebar:
-        st.markdown("# 🌐 NEURAL CONTROL HUB")
+        st.markdown("# 🌍 Control Panel")
         display_model_info(class_names, df)
         display_instructions()
         
-        # Performance metrics with cyberpunk styling
+        # Performance metrics
         st.markdown("""
         <div class="sidebar-card">
-            <h3>⚡ SYSTEM PERFORMANCE</h3>
-            <p><strong>◆ Neural Response:</strong> 2.3ms</p>
-            <p><strong>◆ Matrix Size:</strong> 25.4 MB</p>
-            <p><strong>◆ AI Framework:</strong> TensorFlow</p>
-            <p><strong>◆ Quantum State:</strong> ACTIVE</p>
+            <h3>⚡ Performance</h3>
+            <p><strong>Inference Time:</strong> ~2.3s</p>
+            <p><strong>Model Size:</strong> 25.4 MB</p>
+            <p><strong>Framework:</strong> TensorFlow</p>
         </div>
         """, unsafe_allow_html=True)
     
